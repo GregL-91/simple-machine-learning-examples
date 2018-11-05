@@ -3,6 +3,8 @@ from sklearn import tree
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
+import graphviz
+import numpy as np
 
 
 # Import the adult.txt file into Python
@@ -29,10 +31,22 @@ clf = clf.fit(X_train, Y_train)
 
 # Validate the classifier
 accuracy = clf.score(X_test, Y_test)
-print 'Accuracy: ' + str(accuracy)
+print('Accuracy: ' + str(accuracy))
 
 # Make a confusion matrix
 prediction = clf.predict(X_test)
 
 cm = confusion_matrix(prediction, Y_test)
-print cm
+print(cm)
+
+#stampo l'albero 
+target_name=np.array(['female','male'])
+feature_name=np.array(['race','hours_per_week','occupation'])
+dot_data=tree.export_graphviz(clf, out_file=None, 
+                           feature_names=feature_name,
+                           class_names=target_name,
+                         filled=True, rounded=True,  
+                         special_characters=True) 
+graf=graphviz.Source(dot_data)
+graf.render(filename="alberoGenerato")
+
